@@ -414,6 +414,12 @@ namespace casadi {
     std::vector<MX> map(const std::vector<MX > &arg,
                                       const std::string& parallelization="serial");
 
+    /** \brief  Evaluate symbolically in parallel and sum (matrix graph)
+        \param parallelization Type of parallelization used: expand|serial|openmp
+    */
+    std::vector<MX> mapsum(const std::vector<MX > &arg,
+                                      const std::string& parallelization="serial");
+
     /** \brief Get a function that calculates \a nfwd forward derivatives and nadj adjoint derivatives
      *         Legacy function: Use derForward and derReverse instead.
      *

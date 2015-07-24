@@ -28,6 +28,7 @@
 #include <typeinfo>
 #include "../std_vector_tools.hpp"
 #include "../matrix/matrix_tools.hpp"
+#include "../function/mapsum.hpp"
 
 using namespace std;
 
@@ -126,6 +127,33 @@ namespace casadi {
 
     // Call the internal function
     return (*this)->createMap(x, parallelization);
+  }
+
+  vector<MX> Function::mapsum(const vector< MX > &x,
+                                    const std::string& parallelization) {
+    assertInit();
+    if (x.empty()) return x;
+
+    // Replace arguments if needed
+    if (!matchingArg(x, true)) {
+      vector< MX > x_new = replaceArg(x, true);
+      return mapsum(x_new, parallelization);
+    }
+
+    int n = 1;
+    for (int i=0;i<x.size();++i) {
+      n = max(x[i].size2()/input(i).size2(), n);
+    }
+
+    std::vector<bool> repeat_n;
+    for (int i=0;i<x.size();++i) {
+      repeat_n.push_back(x[i].size2()/input(i).size2()==n);
+    }
+
+    Function ms = MapSum("mapsum", *this, n, repeat_n);
+
+    // Call the internal function
+    return ms(x);
   }
 
   void Function::evaluate() {
