@@ -1542,6 +1542,20 @@ class Functiontests(casadiTestCase):
         Z_ = [ DMatrix(i.sparsity(),np.random.random(i.nnz())) for i in Z ] 
         V_ = [ DMatrix(i.sparsity(),np.random.random(i.nnz())) for i in V ] 
 
+
+        f.generate("trial")
+
+        import subprocess
+        p = subprocess.Popen("gcc -fPIC -shared -O3 trial.c -o trial.so",shell=True).wait()
+        Fcgen = None
+        Fcgen = ExternalFunction("trial")
+        for i,e in enumerate(X_+Y_+Z_+V_):
+          Fcgen.setInput(e,i)
+          Fref.setInput(e,i)
+
+        self.checkfunction(Fcgen,Fref,jacobian=False,hessian=False,evals=False)
+
+
         for f in [F]:
           for i,e in enumerate(X_+Y_+Z_+V_):
             f.setInput(e,i)

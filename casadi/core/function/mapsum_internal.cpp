@@ -99,6 +99,7 @@ namespace casadi {
     const double** arg1 = arg+f_.sz_arg();
     double** sum = res;
 
+    // Clear the accumulators
     for (int k=0;k<num_out;++k) {
       if (sum[k]!=0) std::fill(sum[k], sum[k]+step_out_[k], 0);
     }
@@ -180,6 +181,49 @@ namespace casadi {
 
     return ret;
 
+  }
+
+  void MapSumInternal::generateDeclarations(CodeGenerator& g) const {
+    f_->addDependency(g);
+  }
+
+  void MapSumInternal::generateBody(CodeGenerator& g) const {
+
+    int num_in = f_.nIn(), num_out = f_.nOut();
+
+    g.body << "  const real_t** arg1 = arg+" << f_.sz_arg() << ";" << endl
+           << "  real_t** sum = res;" << endl;
+
+    // Clear the accumulators
+    for (int k=0;k<num_out;++k) {
+      g.body << "  if (sum[" << k << "]!=0) " << g.fill_n(STRING("sum[" << k << "]"), step_out_[k], "0") << endl;
+    };
+
+    g.body << "  real_t** res1 = res+"  << f_.sz_res() <<  ";" << endl;
+
+    g.body << "  int i;" << endl;
+    g.body << "  for (i=0; i<" << n_ << "; ++i) {" << endl;
+
+    g.body << "    real_t* temp_res = w+"  << f_.sz_w() <<  ";" << endl
+           << "    if (temp_res!=0)" << g.fill_n("temp_res", nnz_out_, "0") << endl;
+
+    for (int j=0; j<num_in; ++j) {
+      g.body << "    arg1[" << j << "] = arg[" << j << "]+i*" << step_in_[j] << ";" << endl;
+    }
+    for (int j=0; j<num_out; ++j) {
+      g.body << "    res1[" << j << "] = (res[" << j << "]==0)? 0: temp_res;" << endl
+             << "    temp_res+= " << step_out_[j] << ";" << endl;
+    }
+
+    g.body << "    " << g.call(f_, "arg1", "res1", "iw", "w") << ";" << endl;
+
+    g.addAuxiliary(CodeGenerator::AUX_AXPY);
+    // Sum results
+    for (int k=0; k<num_out; ++k) {
+      g.body << "    if (res1[" << k << "] && sum[" << k << "])" << endl
+             << "       axpy(" << step_out_[k] << ",1,res1["<< k << "],1,sum[" << k << "],1);" << endl;
+    }
+    g.body << "  }" << std::endl;
   }
 
   inline string name(const Function& f) {

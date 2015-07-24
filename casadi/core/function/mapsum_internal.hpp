@@ -71,6 +71,12 @@ namespace casadi {
     /** \brief  Print description */
     virtual void print(std::ostream &stream) const;
 
+    /** \brief Generate code for the declarations of the C function */
+    virtual void generateDeclarations(CodeGenerator& g) const;
+
+    /** \brief Generate code for the body of the C function */
+    virtual void generateBody(CodeGenerator& g) const;
+
     // Default case;
     Function f_;
 
