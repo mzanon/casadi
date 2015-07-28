@@ -435,8 +435,8 @@ class casadiTestCase(unittest.TestCase):
         else:
           return x
         
-      #spmods = [lambda x: x , remove_first, remove_last]
-      spmods = [lambda x: x]
+      spmods = [lambda x: x , remove_first, remove_last]
+      #spmods = [lambda x: x]
       #spmods = [lambda x: x , remove_first]
       
       sym = MX.sym
