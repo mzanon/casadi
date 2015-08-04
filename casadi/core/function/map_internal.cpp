@@ -200,7 +200,7 @@ namespace casadi {
       int n_in_ = f_.nIn(), n_out_ = f_.nOut();
       #ifndef WITH_OPENMP
           // Not available, switching to serial mode
-          evalD(arg, res, iw, w);
+          evalGen<double>(arg, res, iw, w, &FunctionInternal::evalD, std::plus<double>());
       #else // WITH_OPENMP
           size_t sz_arg, sz_res, sz_iw, sz_w;
           f_.sz_work(sz_arg, sz_res, sz_iw, sz_w);
