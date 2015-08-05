@@ -73,6 +73,7 @@ option(WITH_IPOPT "Compile the interface to IPOPT" ON)
 option(WITH_KNITRO "Compile the interface to KNITRO" ON)
 option(WITH_CPLEX "Compile the interface to CPLEX" ON)
 option(WITH_LAPACK "Compile the interface to LAPACK" ON)
+option(WITH_HSL "Compile the interface to HSL" ON)
 option(WITH_OPENCL "Compile with OpenCL support (experimental)" OFF)
 option(WITH_BUILD_TINYXML "Compile the included TinyXML source code" ON)
 option(WITH_TINYXML "Compile the interface to TinyXML" ON)
@@ -361,6 +362,11 @@ if(WITH_LAPACK)
   find_package(LAPACK)
 endif()
 add_feature_info(lapack-interface LAPACK_FOUND "Interface to LAPACK.")
+if(WITH_HSL)
+  find_package(HSL)
+endif()
+add_feature_info(hsl-interface HSL_FOUND "Interface to HSL.")
+
 
 #######################################################################
 ################# third-party libraries we can build ##################
