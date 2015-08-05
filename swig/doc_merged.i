@@ -11602,6 +11602,9 @@ There is no guarantee that consecutive calls return identical objects
 // File: classcasadi_1_1Horzsplit.xml
 
 
+// File: classcasadi_1_1Hsl.xml
+
+
 // File: classcasadi_1_1ImplicitFixedStepIntegrator.xml
 
 
@@ -15282,6 +15285,8 @@ Name of a solver. It might be one of:
 
 - csparse
 
+- hsl
+
 - lapacklu
 
 - lapackqr
@@ -15314,6 +15319,8 @@ Name of a solver. It might be one of:
 - csparsecholesky
 
 - csparse
+
+- hsl
 
 - lapacklu
 
@@ -15879,6 +15886,8 @@ List of plugins
 
 - csparse
 
+- hsl
+
 - lapacklu
 
 - lapackqr
@@ -15920,6 +15929,26 @@ csparse
 
 
 LinearSolver with CSparse Interface
+
+>List of available options
+
++----+------+---------+-------------+
+| Id | Type | Default | Description |
++====+======+=========+=============+
++----+------+---------+-------------+
+
+--------------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------------------------------
+
+hsl
+---
+
+
+
+This class solves the linear system A.x=b by making use of HSL
 
 >List of available options
 

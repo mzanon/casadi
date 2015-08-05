@@ -768,6 +768,15 @@
 @copydoc scheme_NlpSolverOutput
 */
 /// \cond INTERNAL
+/** \class casadi::Hsl
+\n
+\par
+@copydoc scheme_LinsolInput
+<br/>
+@copydoc scheme_LinsolOutput
+*/
+/// \endcond
+/// \cond INTERNAL
 /** \class casadi::IdasInterface
 \n
 \par
