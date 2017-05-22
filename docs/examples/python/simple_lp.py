@@ -33,8 +33,13 @@ from casadi import *
 # Sparsity of the LP linear term
 A = Sparsity.dense(3, 2)
 
+# Solver options: since we solve an LP with a QP solver, let's add some Hessian regularisation
+lpoptions = {}
+lpoptions['enableRegularisation'] = True
+lpoptions['epsRegularisation'] = 1e-6
+
 # Create solver
-solver = conic('solver', 'qpoases', {'a':A})
+solver = conic('solver', 'qpoases', {'a':A},lpoptions)
 #solver = conic('solver', 'clp', {'a':A}) # Use clp
 
 g = DM([3,4])
